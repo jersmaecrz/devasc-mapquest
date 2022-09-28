@@ -1,9 +1,18 @@
 import json
 import urllib.parse
 import requests
+from datetime import datetime, timedelta #Time Module
 
 main_api = "https://www.mapquestapi.com/directions/v2/route?"
 key = "FOTlw2yQDHUrzjGqNZ7sHcHtu1eUXmb5"
+
+def  computeETA(time):
+    duration = float((time)/60) #duration seconds converted to minutes
+    startTime = (datetime.now().strftime("%I:%M %p"))
+    estimatedTimeOfArrival = str(((datetime.now() + timedelta(minutes=duration)).strftime("%I:%M %p")))
+    print("Start Time: " + startTime)
+    print("Estimated Time of Arrival: " + estimatedTimeOfArrival)
+    print("Realtime Trip Duration: " + str("{:.2f}".format(duration)) + " min")
 
 while True:
     orig = input("Starting Location: ")
@@ -23,9 +32,13 @@ while True:
         print("Trip Duration:   " + (json_data["route"]["formattedTime"]))
         print("Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"]) * 1.61)))
         print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"]) * 3.78)))
+         
+        computeETA(json_data["route"]["realTime"]) #Display Start Time & ETA (uses real time - w/consideration of traffic)
+      
         print("==============================================")
         for each in json_data["route"]["legs"][0]["maneuvers"]:
             print((each["narrative"]) + " (" + str("{:.2f}".format((each["distance"]) * 1.61) + " km)"))
+
         print("==============================================\n")
     elif json_status == 402:
         print("**********************************************")
@@ -40,3 +53,4 @@ while True:
         print("For Status Code: " + str(json_status) + "; Refer to:")
         print("https://developer.mapquest.com/documentation/directions-api/status-codes")
         print("**************************************************************\n")
+
