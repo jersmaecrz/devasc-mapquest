@@ -21,12 +21,15 @@ while True:
     orig = input("Starting Location: ")
     if orig == "quit" or orig == "q":
         break
+    print()
     loc1 = input("Stopover 1: ")
     if loc1 == "quit" or loc1 == "q":
         break
+    print()
     loc2 = input("Stopover 2: ")
     if loc2 == "quit" or loc2 == "q":
         break
+    print()
     dest = input("Destination: ")
     if dest == "quit" or dest == "q":
         break
@@ -54,8 +57,8 @@ while True:
         print("==============================================")
         print()
         print("Direct directions from " + (orig) + " to " + (dest))
-        print("Trip Duration:   " + (json_data["route"]["formattedTime"]))
-        print("Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"]) * 1.61)))
+        print("Trip Duration: " + (json_data["route"]["formattedTime"]))
+        print("Kilometers: " + str("{:.2f}".format((json_data["route"]["distance"]) * 1.61)))
         print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"]) * 3.78)))
         computeETA(json_data["route"]["realTime"]) #Display Start Time & ETA (uses real time - w/consideration of traffic)
         print()
@@ -88,13 +91,11 @@ while True:
         print("API Status: " + str(json_status_opt) + " = A successful optimized route call.\n")
         print("==============================================")
         print()
-        print("Directions from " + (orig) + " to " + loc1 + " to " + loc2 + " to " + (dest))
-        print()
-        print("Trip Duration:   " + (json_data_opt["route"]["formattedTime"]))
-        print()
-        print("Kilometers:      " + str("{:.2f}".format((json_data_opt["route"]["distance"]) * 1.61)))
-        print()
+        print("Directions from " + (orig) + " to " + (dest) + " with stopovers to " + (loc1) + " and " + (loc2))
+        print("Trip Duration: " + (json_data_opt["route"]["formattedTime"]))
+        print("Kilometers: " + str("{:.2f}".format((json_data_opt["route"]["distance"]) * 1.61)))
         print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data_opt["route"]["fuelUsed"]) * 3.78)))
+        computeETA(json_data_opt["route"]["realTime"])
         
         i = 0
         y = 0
