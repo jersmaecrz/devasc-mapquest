@@ -89,8 +89,11 @@ while True:
         print("==============================================")
         print()
         print("Directions from " + (orig) + " to " + loc1 + " to " + loc2 + " to " + (dest))
+        print()
         print("Trip Duration:   " + (json_data_opt["route"]["formattedTime"]))
+        print()
         print("Kilometers:      " + str("{:.2f}".format((json_data_opt["route"]["distance"]) * 1.61)))
+        print()
         print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data_opt["route"]["fuelUsed"]) * 3.78)))
         
         i = 0
