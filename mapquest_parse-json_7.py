@@ -179,7 +179,6 @@ def optimizedRouting(): #optimized route
             break
         print("\n")
 
-
         # append entries for the Optimized Route
         locs = "{\"locations\":[\"" + orig + "\",\"" + loc + "\",\"" + dest + "\"]}"
         # make url
@@ -188,6 +187,58 @@ def optimizedRouting(): #optimized route
         
         # request json files
         json_data_opt = requests.get(url_opt).json()
+        
+         # optimized route
+        json_status_opt = json_data_opt["info"]["statuscode"]
+
+        if json_status_opt == 0:
+            print("API Status: " + str(json_status_opt) + " = A successful optimized route call.\n")
+            print("==============================================")
+            print()
+            print("Directions from " + (orig) + " to " + (dest) + " with stopovers to " + (loc))
+            print("Trip Duration: " + (json_data_opt["route"]["formattedTime"]))
+            print("Kilometers: " + str("{:.2f}".format((json_data_opt["route"]["distance"]) * 1.61)))
+            # print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data_opt["route"]["fuelUsed"]) * 3.78)))
+            computeETA(json_data_opt["route"]["realTime"])
+            
+            i = 0
+            y = 0
+            print()
+            print("==============================================")
+            print()
+            while (i < 2):
+                for each in json_data_opt["route"]["legs"][i]["maneuvers"]:
+                    y +=1
+                    print(str(y) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"]) * 1.61) + " km)"))
+                i += 1
+                if i == 3:
+                    print()
+                    print("==============================================\n")
+                    print()
+                else:
+                    print()
+                    print("==============================================")
+                    print()
+        
+        elif json_status_opt == 402:
+            print("**********************************************")
+            print()
+            print("Status Code: " + str(json_status_opt) + "; Invalid user inputs for one or both locations.")
+            print()
+            print("**********************************************\n")
+        elif json_status_opt == 611:
+            print("**********************************************")
+            print()
+            print("Status Code: " + str(json_status_opt) + "; Missing an entry for one or both locations.")
+            print()
+            print("**********************************************\n")
+        else:
+            print("**************************************************************")
+            print()
+            print("For Status Code: " + str(json_status_opt) + "; Refer to:")
+            print("https://developer.mapquest.com/documentation/directions-api/status-codes")
+            print()
+            print("**************************************************************\n")
 
 while True:
     print("\n==============================================\n")
