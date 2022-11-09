@@ -45,10 +45,10 @@ def routeRouting(): #route
         if orig.lower() == "quit" or orig.lower() == "q":
             break
         print()
-        loc = input("Stopover: ")
-        if loc.lower() == "quit" or loc.lower() == "q":
-            break
-        print()
+        # loc = input("Stopover: ")
+        # if loc.lower() == "quit" or loc.lower() == "q":
+        #     break
+        # print()
         dest = input("Destination: ")
         if dest.lower() == "quit" or dest.lower() == "q":
             break
@@ -107,17 +107,17 @@ def alternateRouting(): #alternate route
         if orig.lower() == "quit" or orig.lower() == "q":
             break
         print()
-        loc = input("Stopover: ")
-        if loc.lower() == "quit" or loc.lower() == "q":
-            break
-        print()
+        # loc = input("Stopover: ")
+        # if loc.lower() == "quit" or loc.lower() == "q":
+        #     break
+        # print()
         dest = input("Destination: ")
         if dest.lower() == "quit" or dest.lower() == "q":
             break
         print("\n")
 
         # make url
-        url_alt = alt_api + urllib.parse.urlencode({"key":key, "from":orig, "to":dest})
+        url_alt = alt_api + urllib.parse.urlencode({"key":key, "from":orig, "to":dest, "maxRoutes":2})
         print("URL ALT: " + url_alt)
         
         # request json files
@@ -130,20 +130,21 @@ def alternateRouting(): #alternate route
             print("API Status: " + str(json_status_alt) + " = A successful alternative route call.\n")
             print("==============================================")
             print()
-            print("Direct directions from " + (orig) + " to " + (dest))
-            print("Trip Duration: " + (json_data_alt["route"]["formattedTime"]))
-            print("Kilometers: " + str("{:.2f}".format((json_data_alt["route"]["distance"]) * 1.61)))
+            print("Alternate route directions from " + (orig) + " to " + (dest))
+            print("Trip Duration: " + (json_data_alt["route"]["alternateRoutes"][0]["route"]["formattedTime"]))
+            print("Kilometers: " + str("{:.2f}".format((json_data_alt["route"]["alternateRoutes"][0]["route"]["distance"]) * 1.61)))
             # print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data_alt["route"]["fuelUsed"]) * 3.78)))
-            computeETA(json_data_alt["route"]["realTime"]) #Display Start Time & ETA (uses real time - w/consideration of traffic)
+            computeETA(json_data_alt["route"]["alternateRoutes"][0]["route"]["realTime"]) #Display Start Time & ETA (uses real time - w/consideration of traffic)
             print()
             print("==============================================")
             print()
             y = 0
-            for each in json_data_alt["route"]["legs"][0]["maneuvers"]:
+            for each in json_data_alt["route"]["alternateRoutes"][0]["route"]["legs"][0]["maneuvers"]:
                 y +=1
                 print(str(y) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"]) * 1.61) + " km)"))
             print()
             print("==============================================\n")
+
         elif json_status_alt == 402:
             print("**********************************************")
             print("Status Code: " + str(json_status_alt) + "; Invalid user inputs for one or both locations.")
